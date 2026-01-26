@@ -4,19 +4,19 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("feed.html")
 
-@app.route("/post")
+@app.route("/createProfile")
 def post():
-    return render_template("post.html")
+    return render_template("create_profile.html")
 
 @app.route("/profile")
 def profile():
     return render_template("profile.html")
 
-@app.route("/create")
+@app.route("/createPost")
 def create_post():
-    return render_template("create.html")
+    return render_template("create_post.html")
 
 if __name__ =="__main__":
     app.run(debug=True)
