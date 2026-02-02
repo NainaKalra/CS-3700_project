@@ -1,12 +1,22 @@
+import os
+from flask import Flask, redirect, url_for, render_template, request
+from werkzeug.utils import secure_filename
 from flask import Flask, redirect, url_for, render_template, request
 from datetime import datetime
 
-app = Flask(__name__) #Flask Constructor
+app = Flask(__name__)
 
-# A decorator used to tell the application 
-# which URL is associated function 
+# upload configuration
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-@app.route("/feed")  
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route("/feed")
 def feed():
     posts_data = [
         {"username": "power_lifter", "content": "New PR today! 200kg Squat. Let's go!", "time": "12 MINS AGO", "type": "workout"},
@@ -26,9 +36,21 @@ def create_profile():
 def profile():
     return render_template("profile.html")
 
-@app.route("/createPost")
+@app.route("/createPost", methods=["GET", "POST"])
 def create_post():
-    return render_template("create_post.html")
+    if request.method == "POST":
+        file = request.files.get('image')
+        text = request.form.get('text')
+        image_url = None
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(save_path)
+            image_url = url_for('static', filename=f'uploads/{filename}')
+
+        return render_template("create_post.html", image_url=image_url, text=text)
+    else:
+        return render_template("create_post.html")
 
 @app.route("/", methods=["POST", "GET"])
 def login():

@@ -1,1 +1,27 @@
 {% extends "base.html" %}
+{% block title %}Create Post{% endblock %}
+{% block content %}
+    <div class="create-post">
+        <h2>Create Post</h2>
+
+        <form action="" method="post" enctype="multipart/form-data">
+            <label for="image">Choose an image</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+
+            <label for="text">Add text / caption</label>
+            <textarea id="text" name="text" rows="4" cols="50" placeholder="Write a caption..."></textarea>
+
+            <button type="submit">Upload Post</button>
+        </form>
+
+        {% if image_url %}
+            <h3>Preview</h3>
+            <img src="{{ image_url }}" alt="Uploaded image" style="max-width:400px; display:block; margin-bottom:8px;">
+            {% if text %}
+                <p>{{ text }}</p>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock%}
+
+ 
