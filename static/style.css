@@ -29,3 +29,20 @@ a{
     font-weight: 500;
     font-size: large;
 }
+form{
+    padding-top: 25%;
+}
+.login_content{
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+}
+.login_name{
+    display: flex;
+    justify-self: center;
+    color: orange
+}
+.login_box{
+    display: flex;
+    justify-self: center;
+}
