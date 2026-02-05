@@ -1,14 +1,14 @@
 import os
+import json
 from flask import Flask, redirect, url_for, render_template, request
 from werkzeug.utils import secure_filename
-from flask import Flask, redirect, url_for, render_template, request
 from datetime import datetime
 
 app = Flask(__name__)
 
 # upload configuration
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif','mp4','mov'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -18,13 +18,11 @@ def allowed_file(filename):
 
 @app.route("/feed")
 def feed():
-    posts_data = [
-        {"username": "power_lifter", "content": "New PR today! 200kg Squat. Let's go!", "time": "12 MINS AGO", "type": "workout"},
-        {"username": "fit_2012", "content": "Consistency is key. 30 days challenge done.", "time": "2 HOURS AGO", "type": "body"},
-        {"username": "muscle_meals", "content": "Chicken and broccoli never tasted better.", "time": "5 HOURS AGO", "type": "food"}
-    ]
-    return render_template("feed.html", posts=posts_data)
-    # 'posts' naam se data bhej rahe hain kyunki feed.html mein 'posts' likha hai
+    try:
+        with open('posts.json', 'r') as f:
+            posts_data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        posts_data = []
     return render_template("feed.html", posts=posts_data)
 
 #Function is binded to the route
@@ -48,6 +46,27 @@ def create_post():
             file.save(save_path)
             image_url = url_for('static', filename=f'uploads/{filename}')
 
+            # Save post to posts.json
+            try:
+                with open('posts.json', 'r') as f:
+                    posts = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                posts = []
+
+            new_post = {
+                "username": "user",  # Change this to actual username if you have session
+                "content": text,
+                "image_url": image_url,
+                "time": datetime.now().strftime("%I:%M %p"),
+                "type": "body"
+            }
+            posts.insert(0, new_post)
+
+            with open('posts.json', 'w') as f:
+                json.dump(posts, f, indent=2)
+
+            return redirect(url_for("feed"))
+        
         return render_template("create_post.html", image_url=image_url, text=text)
     else:
         return render_template("create_post.html")
