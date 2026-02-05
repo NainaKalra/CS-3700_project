@@ -24,8 +24,7 @@ def feed():
         {"username": "muscle_meals", "content": "Chicken and broccoli never tasted better.", "time": "5 HOURS AGO", "type": "food"}
     ]
     return render_template("feed.html", posts=posts_data)
-    # 'posts' naam se data bhej rahe hain kyunki feed.html mein 'posts' likha hai
-    return render_template("feed.html", posts=posts_data)
+
 
 #Function is binded to the route
 @app.route("/createProfile")

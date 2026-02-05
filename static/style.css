@@ -31,7 +31,7 @@ a{
 }
 
 :root {
-    --neon-green: rgb(255, 136, 0);;
+    --neon-orange: rgb(255, 136, 0);;
     --dark-bg: #050505;
     --card-bg: #1a1a1a;
 }
@@ -95,7 +95,7 @@ body {
 .post-header {
     padding: 12px;
     font-weight: bold;
-    color: var(--neon-green);
+    color: var(--neon-orange);
     font-size: 14px;
 }
 
@@ -125,7 +125,7 @@ body {
 
 .post-footer-icons span:hover {
     transform: scale(1.2);
-    color: var(--neon-green);
+    color: var(--neon-orange);
 }
 
 .post-description {
