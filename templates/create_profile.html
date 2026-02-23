@@ -1,5 +1,32 @@
-{% extends "base.html" %}
-{% block title %}create profile{% endblock %}
-{% block content %}
-<h1 class="test">This is where you will create your profile</h1>
-{% endblock%}
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style_create_profile.css') }}"/>
+        <title>Create Profile</title>
+
+    </head>
+    <body>
+        <h1>This is where you create your profile</h1>
+
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul style="color: red;">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="{{ url_for('create_profile') }}">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" required>
+            <label for="role">Role:</label>
+            <select name="role" id="role" required>
+                <option value="">--Select a role--</option>
+                <option value="athlete">Athlete</option>
+                <option value="coach">Coach</option>
+            </select>
+            <input type="submit">
+        </form>
+    </body>
+</html>

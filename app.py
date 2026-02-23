@@ -1,10 +1,24 @@
 import os
 import json
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, session, flash
 from werkzeug.utils import secure_filename
 from datetime import datetime
-
+from models.user import User
+from models.database import db
 app = Flask(__name__)
+app.secret_key = "techyeah"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize db with app
+db.init_app(app)
+
+# Create tables and test within app context
+with app.app_context():
+    db.create_all()
+    
+   
 
 # upload configuration
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
@@ -26,9 +40,22 @@ def feed():
     return render_template("feed.html", posts=posts_data)
 
 #Function is binded to the route
-@app.route("/createProfile")
+
+@app.route("/createProfile", methods=['GET','POST'])
 def create_profile():
-    return render_template("create_profile.html")
+    if request.method == 'GET':
+        return render_template('create_profile.html')
+    
+    username = request.form['username']
+    role = request.form['role']
+    if User.query.filter_by(username = username).first():
+        flash("Username already taken!")
+        return redirect(url_for('create_profile'))
+
+    new_user = User(username=username, role=role)
+    new_user.save_to_db()
+    flash("Profile created successfully! Please log in.")
+    return redirect(url_for('login'))
 
 @app.route("/profile")
 def profile():
@@ -74,14 +101,13 @@ def create_post():
 @app.route("/", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
-        user = request.form["nm"]
-        return redirect(url_for("user", usr=user))
+        user = request.form["username"]
+        session["user"] = user
+        return redirect(url_for("profile", usr=user))
     else:
         return render_template("login.html")
 
-@app.route("/<usr>")
-def user(usr):
-    return f"<h1>{usr}</h1>"
+
 
 if __name__ =="__main__":
     app.run(debug=True)
