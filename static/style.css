@@ -138,20 +138,37 @@ body {
     color: #8e8e8e;
     text-transform: uppercase;
 }
-form{
-    padding-top: 25%;
-}
-.login_content{
-    display: flex;
-    justify-self: center;
-    justify-content: center;
-}
+
+
+
+
 .login_name{
     display: flex;
     justify-self: center;
-    color: orange
+    color: orange;
+    padding-bottom: 50px;
+    padding-top:50px ;
+    font-size: 30px;
 }
 .login_box{
     display: flex;
-    justify-self: center;
+    justify-self:center;
+    border: 2px solid orange;
+    border-radius: 8px;
+    outline: none;
+    box-shadow: 0 0 10px white;
+    height: 30px;
+    font-size: larger;
+}
+
+
+.login_submit{
+    display: flex;
+    justify-content: center;
+}
+
+.create_prof_button{
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
 }
