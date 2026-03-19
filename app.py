@@ -103,9 +103,11 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     login_name = request.form['username']
-    
-        
-
+    if User.query.filter_by(username = login_name).first():
+        return render_template('profile.html')
+    else:
+        flash("Username not found!")
+        return render_template("login.html")
 
 if __name__ =="__main__":
     app.run(debug=True)
