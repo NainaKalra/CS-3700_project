@@ -1,5 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Profile{% endblock %}
+{% block title %}profile{% endblock %}
 {% block content %}
-<h1 class="test">heya</h1>
-{% endblock%}
+
+    <h1 class="login_name" style="text-align: center;">WELCOME TO YOUR PROFILE!</h1>
+    <img src="{{url_for('static', filename='def_prof_pic.jpg')}}" alt="Profile Picture" width="100px">
+    <p>{{username}}</p>
+    <p>{{role}}</p>
+
+
+
+{% endblock %}
+

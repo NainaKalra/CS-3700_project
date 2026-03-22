@@ -59,7 +59,16 @@ def create_profile():
 
 @app.route("/profile")
 def profile():
-    return render_template("profile.html")
+    if 'user_id' not in session:
+        flash("Please log in to view your profile.")
+        return redirect(url_for('login'))
+    
+    user = User.query.get(session['user_id'])
+
+    return render_template("profile.html", username=user.username, role=user.role)
+    print("SESSION:", session)
+    print("USER:", user)
+    
 
 @app.route("/createPost", methods=["GET", "POST"])
 def create_post():
@@ -103,8 +112,11 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     login_name = request.form['username']
-    if User.query.filter_by(username = login_name).first():
-        return render_template('profile.html')
+    user = User.query.filter_by(username = login_name).first()
+
+    if user:
+        session['user_id'] = user.id
+        return redirect(url_for('profile'))
     else:
         flash("Username not found!")
         return render_template("login.html")
