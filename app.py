@@ -4,6 +4,7 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from models.user import User
+from models.post import Post
 from models.database import db
 app = Flask(__name__)
 app.secret_key = "techyeah"
@@ -32,11 +33,16 @@ def allowed_file(filename):
 
 @app.route("/feed")
 def feed():
-    try:
-        with open('posts.json', 'r') as f:
-            posts_data = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        posts_data = []
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    posts_data = []
+    for p in posts:
+        posts_data.append({
+            "username": p.username,
+            "content": p.caption,
+            "image_url": p.image,
+            "time": p.timestamp.strftime("%I:%M %p") if p.timestamp else "",
+            "type": "body"
+        })
     return render_template("feed.html", posts=posts_data)
 
 #Function is binded to the route
@@ -82,27 +88,16 @@ def create_post():
             file.save(save_path)
             image_url = url_for('static', filename=f'uploads/{filename}')
 
-            # Save post to posts.json
-            try:
-                with open('posts.json', 'r') as f:
-                    posts = json.load(f)
-            except (FileNotFoundError, json.JSONDecodeError):
-                posts = []
+            current_username = 'guest'
+            if 'user_id' in session:
+                user = User.query.get(session['user_id'])
+                if user:
+                    current_username = user.username
 
-            new_post = {
-                "username": "user",  # Change this to actual username if you have session
-                "content": text,
-                "image_url": image_url,
-                "time": datetime.now().strftime("%I:%M %p"),
-                "type": "body"
-            }
-            posts.insert(0, new_post)
-
-            with open('posts.json', 'w') as f:
-                json.dump(posts, f, indent=2)
-
+            new_post = Post(username=current_username, image=image_url or '', caption=text or '')
+            new_post.save_to_db()
             return redirect(url_for("feed"))
-        
+
         return render_template("create_post.html", image_url=image_url, text=text)
     else:
         return render_template("create_post.html")

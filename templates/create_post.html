@@ -3,7 +3,7 @@
 {% block content %}
     <div class="create-post">
         <h2>Create Post</h2>
-
+        
         <form action="" method="post" enctype="multipart/form-data">
             <label for="image">Choose an image</label>
             <input type="file" id="image" name="image" accept="image/*" required>
@@ -16,11 +16,15 @@
 
         {% if image_url %}
             <h3>Preview</h3>
-            <img src="{{ image_url }}" alt="Uploaded image" style="max-width:400px; display:block; margin-bottom:8px;">
-            {% if text %}
-                <p>{{ text }}</p>
-            {% endif %}
+            <div class = "post-card">
+                <div class="post-header">@{{ username }}</div>
+                <div class="post-image"> <img src="{{ image_url }}" alt="Uploaded image" style="max-width:100%; height:auto;">  
+                </div>
+                <div class = "post-description"><p><strong>{{ username }}</strong> {{ text }}</p></div>
+                <div class ="time">Preview</div>
+            </div>
         {% endif %}
+        
     </div>
 {% endblock%}
 
