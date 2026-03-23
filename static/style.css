@@ -155,3 +155,16 @@ form{
     display: flex;
     justify-self: center;
 }
+
+input {
+    background-color: rgb(31, 30, 30);
+    border: none;
+    border-bottom: 2px solid rgb(255, 136, 0);
+    color: white;
+    padding: 10px;
+    margin: 10px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
