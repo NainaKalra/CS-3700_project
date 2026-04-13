@@ -138,20 +138,107 @@ body {
     color: #8e8e8e;
     text-transform: uppercase;
 }
-form{
-    padding-top: 25%;
-}
-.login_content{
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+.login_name {
     display: flex;
     justify-self: center;
+    background: linear-gradient(135deg, #ff8800, #ffcc00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-bottom: 50px;
+    padding-top: 50px;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-shadow: 0 0 30px rgba(255, 136, 0, 0.3);
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 30px rgba(255, 136, 0, 0.3); }
+    50% { text-shadow: 0 0 50px rgba(255, 136, 0, 0.6); }
+}
+
+.login_box {
+    display: flex;
+    justify-self: center;
+    border: 2px solid rgba(255, 136, 0, 0.4);
+    border-radius: 16px;
+    outline: none;
+    box-shadow: 0 0 15px rgba(255, 136, 0, 0.2);
+    height: 50px;
+    width: 300px;
+    font-size: 16px;
+    padding: 0 20px;
+    background: rgba(255, 255, 255, 0.95);
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.login_box:focus {
+    border-color: #ff8800;
+    box-shadow: 0 0 25px rgba(255, 136, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.login_box::placeholder {
+    color: #999;
+    font-weight: 400;
+}
+
+.login_submit {
+    display: flex;
     justify-content: center;
+    padding-top: 25px;
+    border: none;
+    border-radius: 16px;
+    outline: none;
+    background: linear-gradient(135deg, #ff8800, #ff6600);
+    width: 150px;
+    color: white;
+    align-content: center;
+    height: 50px;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
 }
-.login_name{
-    display: flex;
-    justify-self: center;
-    color: orange
+
+.login_submit::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
 }
-.login_box{
+
+.login_submit:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.login_submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 102, 0, 0.6);
+}
+
+.login_submit:active {
+    transform: translateY(0);
+}
+
+.submit_container {
     display: flex;
     justify-self: center;
 }

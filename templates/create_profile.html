@@ -5,7 +5,7 @@
 
     </head>
     <body>
-        <h1>This is where you create your profile</h1>
+        <h1 class="header">This is where you create your profile</h1>
 
 
         {% with messages = get_flashed_messages() %}
@@ -17,16 +17,33 @@
                 </ul>
             {% endif %}
         {% endwith %}
-        <form method="POST" action="{{ url_for('create_profile') }}">
-            <label for="username">Username:</label>
-            <input type="text" name="username" id="username" required>
-            <label for="role">Role:</label>
-            <select name="role" id="role" required>
-                <option value="">--Select a role--</option>
-                <option value="athlete">Athlete</option>
-                <option value="coach">Coach</option>
-            </select>
-            <input type="submit">
+        <form method="POST" action="{{ url_for('create_profile') }}" class="cool-form">
+            <div class="form-group">
+                <label for="username" class="form-label">
+                    <span class="label-icon">👤</span>
+                    Username
+                </label>
+                <input type="text" name="username" id="username" class="form-input" required placeholder="Enter your username">
+                <div class="input-glow"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="role" class="form-label">
+                    <span class="label-icon">⚡</span>
+                    Role
+                </label>
+                <select name="role" id="role" class="form-select" required>
+                    <option value="">--Select a role--</option>
+                    <option value="athlete">🏃 Athlete</option>
+                    <option value="coach">📋 Coach</option>
+                </select>
+                <div class="input-glow"></div>
+            </div>
+            
+            <button type="submit" class="submit-button">
+                <span class="button-text">Launch Profile</span>
+                <span class="button-icon">🚀</span>
+            </button>
         </form>
     </body>
 </html>
