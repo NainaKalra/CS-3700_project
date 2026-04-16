@@ -15,6 +15,11 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
+
     def __repr__(self):
         return f'<User {self.username}>'
     
+
+
+
+    # One idea to use encapsulation for is protecting data by preventing long bios. New function inside user class that checks length of bio.    

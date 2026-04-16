@@ -74,7 +74,7 @@ def profile():
     return render_template("profile.html", username=user.username, role=user.role)
     print("SESSION:", session)
     print("USER:", user)
-    
+
 
 @app.route("/createPost", methods=["GET", "POST"])
 def create_post():
@@ -115,6 +115,11 @@ def login():
     else:
         flash("Username not found!")
         return render_template("login.html")
+
+@app.route("/editProfile", methods=["GET", "POST"])
+def editProfile():
+    return render_template("EditProfile.html")
+
 
 if __name__ =="__main__":
     app.run(host='0.0.0.0', port=5000,debug=True)

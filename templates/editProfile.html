@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+    <h1 class="login_name" style="text-align: center;">EDIT YOUR PROFILE HERE!</h1>
+    <p>hello</p>    
+    <br>
+    <form action="" method="POST" enctype="multipart/form-data">
+        <label for="bio">Update your bio</label>
+        <br>
+        <textarea id="bio" name="bio" rows="4" cols="50" placeholder="Write a new bio..."></textarea>
+        <br>
+        <button type="submit">Save Changes</button>
+
+    </form>
+    <button class="edit-btn" onclick="window.location.href='{{ url_for('profile') }}'">Back</button>
+</body>
+
+
+</html>

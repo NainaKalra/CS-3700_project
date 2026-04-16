@@ -255,3 +255,68 @@ input {
     justify-content: center;
     align-items: center;
 }
+
+/*profile style*/
+
+.profile {
+  max-width: 400px;
+  margin-left: 200px;   
+  padding: 50px;
+  border: 3px orange solid;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  background-color: rgba(255, 255, 255, 0.047);
+}
+
+.profileBio {
+  max-width: 400px;
+  margin-left: 700px;   
+  padding: 50px;
+  border: 1px orange solid;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  background-color: white;
+}
+
+/* Username */
+.username {
+  margin-left: 250px;
+  font-size: 24px;
+  color: white;
+}
+
+/* Role */
+.role {
+  margin-left: 250px;
+  color: white;
+  margin-top: 5px;  
+}
+
+.bio{
+    margin-top: 10px;
+    margin-left: 100px;
+    color: white;
+}
+
+/* Button */
+.edit-btn {
+  margin-top: 20px;
+  margin-left: 850px;
+  padding: 8px 15px;
+  border: 2px solid orange;
+  background-color: rgba(255, 255, 255, 0.047);
+  cursor: pointer;
+  border-radius: 5px;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #f2f2f273;
+}
+
+hr {
+  border: 3px solid orange;
+  height: 1px;
+  background-color: orange;
+  margin: 20px 0;
+}

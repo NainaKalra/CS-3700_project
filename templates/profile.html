@@ -1,13 +1,33 @@
 {% extends "base.html" %}
-{% block title %}profile{% endblock %}
+{% block title %}Profile{% endblock %}
 {% block content %}
-
+        
     <h1 class="login_name" style="text-align: center;">WELCOME TO YOUR PROFILE!</h1>
-    <img src="{{url_for('static', filename='def_prof_pic.jpg')}}" alt="Profile Picture" width="100px">
-    <p>{{username}}</p>
-    <p>{{role}}</p>
+    <br>
+    <div style="display: flex; align-items: center; gap: 5px;">
+        <div class="profile">
+            <p class="username" id="username">{{username}}</p>
+            <p class="role" id="role">Role:   {{role}}</p>
+            
+        </div>
+        <div class="profile">
+            {% if bio %}
+                <p class="bio" id="bio">{{bio}}</p>
+            {% else %}
+                <p class="bio" id="bio">No bio available.</p>
+            {% endif %}
+        </div>   
+    </div>
 
+    <button class="edit-btn" onclick="window.location.href='{{ url_for('editProfile') }}'">Edit your profile</button>
+
+    <hr>
+
+    <h2 class="login_name" style="text-align: center;">POSTS</h2>
 
 
 {% endblock %}
+
+
+
 
