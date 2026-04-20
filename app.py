@@ -71,7 +71,9 @@ def profile():
     
     user = User.query.get(session['user_id'])
 
-    return render_template("profile.html", username=user.username, role=user.role)
+    posts = Post.query.filter_by(username=user.username).all()
+
+    return render_template("profile.html", username=user.username, role=user.role, posts=posts)
     print("SESSION:", session)
     print("USER:", user)
 
