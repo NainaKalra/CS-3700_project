@@ -4,10 +4,11 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from models.user import User
-from models.post import Post
+from models.post import Post 
 from models.database import db
 from models.user_service import UserService
 from models.session_manager import SessionManager, login_required
+from models.post_service import PostService
 app = Flask(__name__)
 app.secret_key = "techyeah"
 
@@ -35,16 +36,9 @@ def allowed_file(filename):
 
 @app.route("/feed")
 def feed():
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
-    posts_data = []
-    for p in posts:
-        posts_data.append({
-            "username": p.username,
-            "content": p.caption,
-            "image_url": p.image,
-            "time": p.timestamp.strftime("%I:%M %p") if p.timestamp else "",
-            "type": "body"
-        })
+    # Using the new OOP method instead of direct query
+    posts = Post.get_feed_posts()  # Clean and polymorphic!
+    posts_data = [post.to_feed_dict() for post in posts]
     return render_template("feed.html", posts=posts_data)
 
 #Function is binded to the route
@@ -75,30 +69,29 @@ def profile():
     return render_template("profile.html", **profile_data)
 
 @app.route("/createPost", methods=["GET", "POST"])
+@login_required
 def create_post():
     if request.method == "POST":
         file = request.files.get('image')
         text = request.form.get('text')
-        image_url = None
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(save_path)
-            image_url = url_for('static', filename=f'uploads/{filename}')
-
-            current_username = 'guest'
-            if 'user_id' in session:
-                user = User.query.get(session['user_id'])
-                if user:
-                    current_username = user.username
-
-            new_post = Post(username=current_username, image=image_url or '', caption=text or '')
-            new_post.save_to_db()
-            return redirect(url_for("feed"))
-
-        return render_template("create_post.html", image_url=image_url, text=text)
-    else:
-        return render_template("create_post.html")
+        user_id = session.get('user_id')
+        
+        if not user_id:
+            flash("Please log in to create a post")
+            return redirect(url_for('login'))
+        
+        # Use the service
+        new_post, errors = PostService.create_post(user_id, text, file, app.config['UPLOAD_FOLDER'])
+        
+        if errors:
+            for error in errors:
+                flash(error)
+            return render_template("create_post.html")
+        
+        flash("Post created successfully!")
+        return redirect(url_for("feed"))
+    
+    return render_template("create_post.html")
 
 @app.route("/", methods=["POST", "GET"])
 def login():
