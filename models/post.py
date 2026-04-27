@@ -1,7 +1,8 @@
 from models.database import db
+from models.base import BaseModel
 from sqlalchemy import UniqueConstraint, func
 
-class Post(db.Model):
+class Post(BaseModel):
     __tablename__ = 'posts' 
     __table_args__ = (UniqueConstraint('username', 'timestamp', name='primary_key'),)
     user = db.relationship('User', back_populates='posts')

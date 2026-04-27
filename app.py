@@ -6,6 +6,8 @@ from datetime import datetime
 from models.user import User
 from models.post import Post
 from models.database import db
+from models.user_service import UserService
+from models.session_manager import SessionManager, login_required
 app = Flask(__name__)
 app.secret_key = "techyeah"
 
@@ -54,29 +56,23 @@ def create_profile():
     
     username = request.form['username']
     role = request.form['role']
-    if User.query.filter_by(username = username).first():
-        flash("Username already taken!")
-        return redirect(url_for('create_profile'))
-
-    new_user = User(username=username, role=role)
-    new_user.save_to_db()
-    flash("Profile created successfully! Please log in.")
-    return redirect(url_for('login'))
+    
+    user = UserService.create_user(username, role)
+    if user:
+        return redirect(url_for('login'))
+    return redirect(url_for('create_profile'))
 
 @app.route("/profile")
+@login_required
 def profile():
-    if 'user_id' not in session:
-        flash("Please log in to view your profile.")
+    user_id = SessionManager.get_current_user_id()
+    profile_data = UserService.get_user_profile(user_id)
+
+    if not profile_data:
+        flash("User not found")
         return redirect(url_for('login'))
     
-    user = User.query.get(session['user_id'])
-
-    posts = Post.query.filter_by(username=user.username).all()
-
-    return render_template("profile.html", username=user.username, role=user.role, posts=posts)
-    print("SESSION:", session)
-    print("USER:", user)
-
+    return render_template("profile.html", **profile_data)
 
 @app.route("/createPost", methods=["GET", "POST"])
 def create_post():
@@ -109,10 +105,10 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     login_name = request.form['username']
-    user = User.query.filter_by(username = login_name).first()
+    user = UserService.authenticate_user(login_name)
 
     if user:
-        session['user_id'] = user.id
+        SessionManager.set_user_session(user.id)
         return redirect(url_for('profile'))
     else:
         flash("Username not found!")
